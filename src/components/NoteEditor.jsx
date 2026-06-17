@@ -2,6 +2,9 @@
 import { CheckCheck, FolderOpen, NotepadText, Trash2, Save, AlertCircle, Circle, CircleDot } from 'lucide-react';
 import { useState, useEffect, useRef } from 'react';
 import UpgradeButton from './UpgradeButton';
+// Agrega esto arriba, después de los imports
+// La ruta debe coincidir con el case de tu switch en index.php
+const API_BASE_URL = 'https://mi-backend-php.onrender.com/api/notes';
 export default function NoteEditor({ user, folderId, folders }) {
     const [notes, setNotes] = useState([]);
     const [totalNoteCount, setTotalNoteCount] = useState(0);
@@ -15,7 +18,7 @@ export default function NoteEditor({ user, folderId, folders }) {
 
     const fetchData = async () => {
         try {
-            const url = new URL('https://misnotasweb.free.nf/api/notes.php');
+            const url = new URL(API_BASE_URL); // Usa la constante
             url.searchParams.append('user_id', user.id);
             if (folderId !== null) {
                 url.searchParams.append('folder_id', folderId);
@@ -31,7 +34,7 @@ export default function NoteEditor({ user, folderId, folders }) {
 
     const fetchNoteCount = async () => {
         try {
-            const url = new URL('https://misnotasweb.free.nf/api/notes.php');
+            const url = new URL(API_BASE_URL); // Usa la constante
             url.searchParams.append('user_id', user.id);
             const res = await fetch(url.toString());
             const data = await res.json();
@@ -41,24 +44,30 @@ export default function NoteEditor({ user, folderId, folders }) {
         }
     };
 
+    // Ejemplo para tu función updateNote
     const updateNote = async (note) => {
         if (!note?.id) return;
 
-        await fetch('https://misnotasweb.free.nf/api/notes.php', {
-            method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
+        try {
+            const response = await fetch(API_BASE_URL, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
                 id: note.id,
                 user_id: user.id,
                 title: note.title ?? 'Sin título',
                 content: note.content ?? '',
                 priority: note.priority ?? 'bajo',
                 folder_id: note.folder_id === null ? 'null' : note.folder_id
-            })
-        });
-
-        fetchData();
-        fetchNoteCount();
+                })
+            });
+            if (!response.ok) throw new Error('Error al actualizar');
+            fetchData();
+            fetchNoteCount();
+        } catch (err) {
+            console.error("Error en la petición:", err);
+            // Opcional: setError("No se pudo guardar la nota");
+        }
     };
 
     const createNote = async () => {
@@ -70,7 +79,7 @@ export default function NoteEditor({ user, folderId, folders }) {
             return;
         }
 
-        const response = await fetch('https://misnotasweb.free.nf/api/notes.php', {
+        const response = await fetch(API_BASE_URL, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -99,7 +108,7 @@ export default function NoteEditor({ user, folderId, folders }) {
     };
 
     const deleteNote = async (noteId) => {
-        await fetch('https://misnotasweb.free.nf/api/notes.php', {
+        await fetch(API_BASE_URL, {
             method: 'DELETE',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ id: noteId, user_id: user.id })

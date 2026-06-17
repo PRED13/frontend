@@ -1,6 +1,9 @@
 // frontend/src/components/Sidebar.jsx
 import { useState } from 'react';
 
+// Constante para la ruta limpia, coincidente con tu Router en index.php
+const API_FOLDERS_URL = 'https://mi-backend-php.onrender.com/api/folders';
+
 export default function Sidebar({ user, folders, onFolderSelect, refreshData }) {
     const [newFolderName, setNewFolderName] = useState('');
     const [editingId, setEditingId] = useState(null);
@@ -8,31 +11,53 @@ export default function Sidebar({ user, folders, onFolderSelect, refreshData }) 
 
     const createFolder = async () => {
         if (!newFolderName.trim()) return;
-        await fetch('https://misnotasweb.free.nf/api/folders.php', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ name: newFolderName, user_id: user.id })
-        });
-        setNewFolderName('');
-        refreshData();
+        try {
+            const res = await fetch(API_FOLDERS_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name: newFolderName, user_id: user.id })
+            });
+            if (!res.ok) throw new Error('Error al crear carpeta');
+            
+            setNewFolderName('');
+            refreshData();
+        } catch (err) {
+            console.error("Error al crear carpeta:", err);
+        }
     };
 
     const updateFolder = async (id) => {
-        await fetch('https://misnotasweb.free.nf/api/folders.php', {
-            method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ id, name: editName, user_id: user.id })
-        });
-        setEditingId(null);
-        refreshData();
+        try {
+            const res = await fetch(API_FOLDERS_URL, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ id, name: editName, user_id: user.id })
+            });
+            if (!res.ok) throw new Error('Error al actualizar carpeta');
+            
+            setEditingId(null);
+            refreshData();
+        } catch (err) {
+            console.error("Error al actualizar carpeta:", err);
+        }
     };
 
     const deleteFolder = async (id) => {
         if (!confirm("¿Eliminar esta carpeta? Las notas dentro quedarán sin categoría.")) return;
-        await fetch(`https://misnotasweb.free.nf/api/folders.php?user_id=${user.id}&id=${id}`, {
-            method: 'DELETE'
-        });
-        refreshData();
+        
+        try {
+            // Construcción segura de la URL con parámetros
+            const url = new URL(API_FOLDERS_URL);
+            url.searchParams.append('user_id', user.id);
+            url.searchParams.append('id', id);
+
+            const res = await fetch(url.toString(), { method: 'DELETE' });
+            if (!res.ok) throw new Error('Error al eliminar carpeta');
+            
+            refreshData();
+        } catch (err) {
+            console.error("Error al eliminar carpeta:", err);
+        }
     };
 
     return (
