@@ -7,12 +7,14 @@ export default function Auth({ onLoginSuccess }) {
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
 
+    // frontend/src/components/Auth.jsx
     const handleSubmit = async (e) => {
         e.preventDefault();
         setError('');
 
         try {
-            const response = await fetch('https://mi-backend-php.onrender.com/api/auth.php', {
+            // Ajuste: Usamos la variable de entorno definida en Vercel
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/api/auth.php`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({

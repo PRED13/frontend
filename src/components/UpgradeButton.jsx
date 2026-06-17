@@ -1,11 +1,13 @@
 // frontend/src/components/UpgradeButton.jsx
+// frontend/src/components/UpgradeButton.jsx
 import { useState } from 'react';
 import { PayPalButtons } from "@paypal/react-paypal-js";
 
-// Usamos la ruta limpia que gestiona tu Router en index.php
-const API_PAYMENTS_URL = 'https://mi-backend-php.onrender.com/api/payments';
+// Cambiamos la URL fija por la variable de entorno
+const API_PAYMENTS_URL = `${import.meta.env.VITE_API_URL}/api/payments`;
 
 export default function UpgradeButton({ user, onUpgrade }) {
+    // ... el resto del código se queda igual
     const [paymentMethod, setPaymentMethod] = useState('paypal');
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');

@@ -1,10 +1,11 @@
 // frontend/src/components/Sidebar.jsx
 import { useState } from 'react';
 
-// Constante para la ruta limpia, coincidente con tu Router en index.php
-const API_FOLDERS_URL = 'https://mi-backend-php.onrender.com/api/folders';
+// Ahora usamos la variable de entorno configurada en Vercel
+const API_FOLDERS_URL = `${import.meta.env.VITE_API_URL}/api/folders`;
 
 export default function Sidebar({ user, folders, onFolderSelect, refreshData }) {
+    // ... el resto de tu código se queda exactamente igual
     const [newFolderName, setNewFolderName] = useState('');
     const [editingId, setEditingId] = useState(null);
     const [editName, setEditName] = useState('');

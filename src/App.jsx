@@ -6,9 +6,13 @@ import NoteEditor from './components/NoteEditor';
 import UpgradeButton from './components/UpgradeButton';
 
 // Usamos la ruta limpia que gestiona tu Router en index.php
-const API_FOLDERS_URL = 'https://mi-backend-php.onrender.com/api/folders';
+// frontend/src/App.jsx
+
+// Cambiamos la URL fija por la variable de entorno dinámica
+const API_FOLDERS_URL = `${import.meta.env.VITE_API_URL}/api/folders`;
 
 function App() {
+  // ... resto del código sin cambios
   const [user, setUser] = useState(null);
   const [folderId, setFolderId] = useState(null);
   const [folders, setFolders] = useState([]);

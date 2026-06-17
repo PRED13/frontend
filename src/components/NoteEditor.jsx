@@ -4,7 +4,8 @@ import { useState, useEffect, useRef } from 'react';
 import UpgradeButton from './UpgradeButton';
 // Agrega esto arriba, después de los imports
 // La ruta debe coincidir con el case de tu switch en index.php
-const API_BASE_URL = 'https://mi-backend-php.onrender.com/api/notes';
+// frontend/src/components/NoteEditor.jsx
+const API_BASE_URL = `${import.meta.env.VITE_API_URL}/api/notes`;
 export default function NoteEditor({ user, folderId, folders }) {
     const [notes, setNotes] = useState([]);
     const [totalNoteCount, setTotalNoteCount] = useState(0);
