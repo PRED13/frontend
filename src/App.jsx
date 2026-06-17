@@ -1,8 +1,12 @@
+// frontend/src/App.jsx
 import { useState, useEffect } from 'react';
 import Auth from './components/Auth';
 import Sidebar from './components/Sidebar';
 import NoteEditor from './components/NoteEditor';
 import UpgradeButton from './components/UpgradeButton';
+
+// Usamos la ruta limpia que gestiona tu Router en index.php
+const API_FOLDERS_URL = 'https://mi-backend-php.onrender.com/api/folders';
 
 function App() {
   const [user, setUser] = useState(null);
@@ -10,13 +14,20 @@ function App() {
   const [folders, setFolders] = useState([]);
 
   const fetchFolders = async () => {
+    // Si no es premium, no pedimos carpetas
     if (!user?.is_premium) {
       setFolders([]);
       return;
     }
 
     try {
-      const res = await fetch(`https://misnotasweb.free.nf/api/folders.php?user_id=${user.id}`);
+      // Usamos URLSearchParams para manejar parámetros de forma segura
+      const url = new URL(API_FOLDERS_URL);
+      url.searchParams.append('user_id', user.id);
+
+      const res = await fetch(url.toString());
+      if (!res.ok) throw new Error('Error al cargar carpetas');
+      
       const data = await res.json();
       setFolders(data.data || []);
     } catch (error) {
@@ -26,25 +37,22 @@ function App() {
   };
 
   useEffect(() => {
-    if (user) {
+    if (user?.is_premium) {
       fetchFolders();
     }
   }, [user?.id, user?.is_premium]);
 
-  // Función para manejar el upgrade a Premium
   const handleUpgrade = () => {
-    // Actualizamos el estado local para que la UI refleje el nuevo rol
     setUser({ ...user, is_premium: true });
   };
 
-  // 1. Si no hay usuario, mostramos el login/registro
   if (!user) {
     return <Auth onLoginSuccess={(userData) => setUser(userData)} />;
   }
 
   return (
     <div className="flex h-screen w-full bg-[#0B0F19] text-slate-200 overflow-hidden">
-      {/* Sidebar - Ancho fijo con scroll personalizado */}
+      {/* Sidebar */}
       <aside className="w-72 border-r border-slate-800 bg-slate-900/30 backdrop-blur-md flex flex-col shadow-2xl">
         <div className="flex flex-col flex-1 overflow-y-auto">
           <Sidebar
@@ -55,7 +63,6 @@ function App() {
           />
         </div>
 
-        {/* Upgrade Call-to-action fijo abajo */}
         {!user.is_premium && (
           <div className="p-4 border-t border-slate-800 bg-slate-950/50">
             <UpgradeButton user={user} onUpgrade={handleUpgrade} />
@@ -65,8 +72,6 @@ function App() {
 
       {/* Main Content */}
       <main className="flex-1 flex flex-col relative bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-slate-900/20 via-[#0B0F19] to-[#0B0F19]">
-        
-        {/* Top Bar de Usuario */}
         <header className="h-16 border-b border-slate-800/60 flex items-center justify-end px-8 gap-6 bg-slate-900/10 backdrop-blur-sm">
           <div className="flex items-center gap-3">
             <span className="text-sm font-medium text-slate-400">@{user.username}</span>
@@ -80,7 +85,6 @@ function App() {
           </div>
         </header>
 
-        {/* Área del Editor */}
         <section className="flex-1 overflow-hidden p-6">
           <div className="h-full rounded-2xl border border-slate-800 bg-slate-900/20 shadow-inner overflow-hidden">
             <NoteEditor 
