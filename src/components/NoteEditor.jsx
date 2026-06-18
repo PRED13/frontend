@@ -151,7 +151,7 @@ export default function NoteEditor({ user, folderId, folders }) {
             {/* Formulario de creación */}
             <div className="mb-8 rounded-xl border border-slate-700 bg-gradient-to-br from-slate-800 to-slate-900 p-6 shadow-lg">
                 <h3 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
-                    <CheckCheck color='#0099ff'/> Crear nueva nota
+                    <CheckCheck color='#0ec47e'/> Crear nueva nota
                 </h3>
                 {error && <p className="mb-3 text-sm text-red-400 bg-red-500/10 p-3 rounded-lg border border-red-500/20">{error}</p>}
                 {success && <p className="mb-3 text-sm text-emerald-400 bg-emerald-500/10 p-3 rounded-lg border border-emerald-500/20">{success}</p>}
