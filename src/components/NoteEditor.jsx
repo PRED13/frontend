@@ -171,7 +171,7 @@ export default function NoteEditor({ user, folderId, folders }) {
                         <option value="null">Sin carpeta</option>
                         {folders?.map((folder) => (<option key={folder.id} value={folder.id}>{folder.name}</option>))}
                     </select>
-                    <button type="button" onClick={createNote} disabled={freeNoteLimitReached} className="w-full max-w-[200px] bg-gradient-to-r from-blue-600 to-blue-700 text-white font-bold py-3 rounded-lg hover:from-blue-700 hover:to-blue-800 transition-all disabled:opacity-50">
+                    <button type="button" onClick={createNote} disabled={freeNoteLimitReached} className="w-full max-w-[200px] bg-gradient-to-r from-emeral-600 to-emeral-700 text-white font-bold py-3 rounded-lg hover:from-blue-700 hover:to-blue-800 transition-all disabled:opacity-50">
                         Crear nota
                     </button>
                 </div>
