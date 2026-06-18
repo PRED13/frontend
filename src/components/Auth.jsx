@@ -60,9 +60,6 @@ export default function Auth({ onLoginSuccess }) {
             <h2 className="text-3xl font-extrabold tracking-tight text-white mb-2">
             {isRegister ? 'Crea tu cuenta' : 'Bienvenido de nuevo'}
             </h2>
-            <p className="text-slate-400 text-sm">
-            {isRegister ? 'Empieza a organizar tus ideas hoy' : 'Accede para gestionar tus notas'}
-            </p>
         </div>
         
         {/* Error Alert */}
