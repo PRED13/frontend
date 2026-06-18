@@ -147,8 +147,7 @@ export default function NoteEditor({ user, folderId, folders }) {
                 {folderId !== null ? <FolderOpen color='#ffffff' size="40"/> : <NotepadText color='#0099ff' size="50"/> }
                 <span>Notas</span>
             </h1>
-            <p className="text-slate-400 mb-8 text-sm">Crea, edita y organiza tus notas con facilidad</p>
-
+            
             {/* Formulario de creación */}
             <div className="mb-8 rounded-xl border border-slate-700 bg-gradient-to-br from-slate-800 to-slate-900 p-6 shadow-lg">
                 <h3 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
